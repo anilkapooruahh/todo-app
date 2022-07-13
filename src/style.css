@@ -1,0 +1,80 @@
+/* Custom properties*/
+:root {
+/* Colors */
+    --clr-white: #F8F9D7;
+    --clr-light: #C4D7E0;
+    --clr-accent: #393E46;
+    --clr-dark: #222831;
+}
+/* Fonts */
+@font-face {
+    font-family: "Futura";
+    src: url("./Futura\ Book\ font.ttf");
+}
+
+
+#content {
+    background-color: var(--clr-light);
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    font-family: "Futura";
+    color: var(--clr-light);
+}
+
+body {
+    width:100vw;
+    height: 100vh;
+    margin: 0;
+}
+
+.navbar{
+    background-color: var(--clr-dark);
+    color: var(--clr-light);
+    padding: 20px;
+}
+
+.navbar--list {
+    margin:0;
+    width: inherit;
+    display: flex;
+    flex-direction: row;
+    gap: 20vw;
+}
+
+span {
+    color: white;
+}
+
+
+h4 {
+    margin: 0;
+}
+
+.project-menu {
+    background-color: var(--clr-accent);
+    text-align: justify;
+    width: 15vw;
+    height: 100%;
+    padding: 10px;
+    height: 87.5vh;
+}
+
+.project-menu--item {
+    padding-top: 20px;
+    width:inherit
+}
+
+a:hover{
+    display: block;
+    background-color: var(--clr-light) !important;
+    color: var(--clr-accent);
+
+}
+
+a:active{
+    display: block;
+    background-color: var(--clr-light) !important;
+    color: var(--clr-accent);
+
+}
