@@ -3,19 +3,19 @@ const Item = (name, due, desc = "") => {
     let itemdueDate = due;
     let itemDesc = desc;
 
-    getItemName = () => itemName;
-    getItemDate = () => itemdueDate;
-    getItemDesc = () => itemDesc;
+   const getItemName = () => itemName;
+   const getItemDate = () => itemdueDate;
+   const getItemDesc = () => itemDesc;
 
-    setItemName = (name) => {
+   const setItemName = (name) => {
         itemName = name;
     };
 
-    setItemDate = (date) => {
+   const setItemDate = (date) => {
         itemdueDate = date;
     };
 
-    setItemDesc = (desc) => {
+   const setItemDesc = (desc) => {
         itemDesc = desc;
     };
 

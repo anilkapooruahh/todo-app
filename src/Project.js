@@ -1,3 +1,4 @@
+
 const Project = (name) => {
     let projectName = name;
     const projectItems = [];
@@ -9,11 +10,11 @@ const Project = (name) => {
 
     const getProjectItems = () => projectItems;
 
-    const addItem = (item) => {
+    const addItem = (addedItem) => {
         // Checks if item to be added has the same name as a pre existing one
-        if (projectItems.filter(item => item.name === itemName).length === 0) {
-            projectItems.push(item);
-        }
+      //  if (projectItems.filter(item => item.getItemName() === addedItem.getItemName()).length === 0) {
+            projectItems.push(addedItem);
+        //}
     };
 
     const deleteItem = (deleteItemName) => {
