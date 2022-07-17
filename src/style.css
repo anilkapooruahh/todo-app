@@ -116,3 +116,17 @@ a:hover{
     background-color: #F8F9D7;
     padding: 10px;
 }
+
+.item-form {
+    position: fixed;
+    background-color: var(--clr-dark);
+    color: var(--clr-light);
+    width: fit-content;
+    padding: 10px;
+    top: 0;
+    right: 0;
+}
+
+input {
+    max-width: 100px;
+}

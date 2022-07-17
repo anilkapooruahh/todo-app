@@ -1,7 +1,7 @@
 
 const Project = (name) => {
     let projectName = name;
-    const projectItems = [];
+    let projectItems = [];
 
     const getProjectName = () => projectName;
     const setProjectName = (newName) => {
@@ -18,7 +18,7 @@ const Project = (name) => {
     };
 
     const deleteItem = (deleteItemName) => {
-        projectItems.filter(item => item.name !== deleteItemName);
+       projectItems =  projectItems.filter(item => item.getItemName() !== deleteItemName);
     };
 
     return { getProjectName, setProjectName, getProjectItems, addItem, deleteItem };

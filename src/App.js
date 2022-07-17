@@ -1,6 +1,7 @@
 import Project from "./Project";
 
 import Item from "./Item";
+import { de } from "date-fns/locale";
 
 
 
@@ -24,19 +25,19 @@ const App = (() => {
     p1.addItem(i1)  
     
 
-    const projects = [p1, p2];
+    let projects = [p1, p2];
 
     const getProjects = () => projects;
     const addProject = (projectName) => {
         // Checks if project to be added has the same name as a pre existing one
-        if (projects.filter(item => item.name === projectName).length === 0) {
+        if (projects.filter(item => item.getProjectName() === projectName).length === 0) {
             const project = Project(projectName);
             projects.push(project);
         }
     };
 
     const deleteProject = (deleteProjectName) => {
-        projects.filter(project => project.name !== deleteProjectName);
+       projects = projects.filter(project => project.getProjectName() !== deleteProjectName.getProjectName());
     };
 
     return { addProject, deleteProject, getProjects };

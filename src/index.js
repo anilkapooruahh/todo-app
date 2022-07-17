@@ -1,10 +1,9 @@
 import App from "./App";
+import Item from "./Item";
 import "./style.css"
 import "normalize.css"
 import { library, icon } from "@fortawesome/fontawesome-svg-core";
 import { faAlignJustify, fas } from "@fortawesome/free-solid-svg-icons";
-import { sub } from "date-fns";
-import { ca } from "date-fns/locale";
 
 library.add(faAlignJustify)
 
@@ -22,7 +21,7 @@ const Display = (() => {
             const menu = document.getElementById("project-menu")
             menu.classList.toggle("hide")
         }
-        
+        content.textContent = ""
         
         const app = document.createElement("div")
         app.classList.add("app")
@@ -120,8 +119,17 @@ const Display = (() => {
 
     const createProjectMenuItem = (project, app) => {
         const item = document.createElement("div")
+        const del = document.createElement("button")
+        del.textContent = "delete"
+        del.addEventListener("click",
+         () => {
+            alert("Delete Project?")
+            App.deleteProject(project)
+            displayApp()
+            }
+        )
+        item.appendChild(del)
         const link = document.createElement("a")
-        console.log(project.getProjectName());
         link.addEventListener("click", () => showProjects(project, app))
         item.classList.add("project-menu--item")
         link.textContent = `${project.getProjectName()}`
@@ -133,16 +141,25 @@ const Display = (() => {
         const getAppDiv = document.getElementById("app-div")
         const appDiv = getAppDiv ? getAppDiv : document.createElement("div")
         appDiv.id = "app-div"
+        appDiv.textContent = ""
         if (!getAppDiv) {
             makeHeading()
         }
+
+        const add = document.createElement("button")
+        add.textContent = "add"
+        add.addEventListener("click", () => {
+            createItemForm(project, appDiv, add)
+            add.classList.toggle("hide")
+        })
+        appDiv.appendChild(add)
 
         const getDiv = document.getElementById("items-container")
         const itemsContainer = getDiv ? getDiv : document.createElement("div")
         itemsContainer.id = "items-container"
         itemsContainer.textContent = ""
         for (let i = 0; i < project.getProjectItems().length ; i++) {
-            const itemCard = createItemCard(project.getProjectItems()[i])
+            const itemCard = createItemCard(project.getProjectItems()[i], project, container)
             itemsContainer.appendChild(itemCard)
         }
         appDiv.appendChild(itemsContainer)
@@ -153,9 +170,65 @@ const Display = (() => {
             heading.textContent = "To Do List";
             appDiv.appendChild(heading);
         }
+
+        function createItemForm(project, appDiv, button) {
+            const form = document.createElement("form")
+            form.classList.add("item-form")
+
+            const heading = document.createElement("h3")
+            heading.textContent = "Add Task"
+            form.appendChild(heading)
+
+            const nameField = document.createElement("div")
+            const nameInput = document.createElement("input")
+            const nameLabel = document.createElement("p")
+            nameLabel.textContent = "Task name"
+            nameField.appendChild(nameLabel)
+            nameField.appendChild(nameInput)
+            form.appendChild(nameField)
+
+            const dateField = document.createElement("div")
+            const dateInput = document.createElement("input")
+            const dateLabel = document.createElement("p")
+            dateInput.type = "date"
+            dateLabel.textContent = "Due date"
+            dateField.appendChild(dateLabel)
+            dateField.appendChild(dateInput)
+            form.appendChild(dateField)
+
+            
+            const descField = document.createElement("div")
+            const descInput = document.createElement("input")
+            const descLabel = document.createElement("p")
+            descInput.type = "textarea"
+            descLabel.textContent = "Description"
+            descField.appendChild(descLabel)
+            descField.appendChild(descInput)
+            form.appendChild(descField)
+
+            const add  = document.createElement("button")
+            add.textContent = "Submit"
+            add.addEventListener("click", (e) => {
+                e.preventDefault()
+                const newItem = Item(
+                    nameInput.value,
+                    dateInput.value,
+                    descInput.value
+                    )
+                project.addItem(newItem)
+                showProjects(project, container)
+            
+            })
+
+            form.appendChild(add)
+
+
+            appDiv.appendChild(form)
+
+        } 
     }
 
-    const createItemCard = (item) => {
+    const createItemCard = (item, project, app) => {
         const itemCard = document.createElement("div")
         itemCard.classList.add("item-card")
 
@@ -177,7 +250,18 @@ const Display = (() => {
         itemDesc.textContent = item.getItemDesc()
         itemDesc.classList.add("item-desc")
         itemCard.appendChild(itemDesc)
+
+        const del = document.createElement("button")
+        del.textContent = "delete task"
+        del.addEventListener("click", () => {
+            project.deleteItem(item.getItemName())
+            showProjects(project, app)
+        })
+
+        itemCard.appendChild(del)
+
         return itemCard
+
     }
 
 
