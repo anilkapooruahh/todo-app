@@ -1,4 +1,5 @@
 import App from "./App";
+import Memory from "./Memory";
 import Item from "./Item";
 import "./style.css"
 import "normalize.css"
@@ -10,13 +11,12 @@ library.add(faAlignJustify)
 const content = document.getElementById("content")
 
 
-
-console.log(App.getProjects());
-
-
-
+Memory.save()
 const Display = (() => {
+    
     const displayApp = () => {
+        const appState = JSON.parse(Memory.load("appState"))
+        console.log(appState);
         const toggleMenu = () => {
             const menu = document.getElementById("project-menu")
             menu.classList.toggle("hide")
@@ -25,7 +25,7 @@ const Display = (() => {
         
         const app = document.createElement("div")
         app.classList.add("app")
-        createProjectMenu(app)
+        createProjectMenu(app, appState)
       
         const navbar = createNavbar(toggleMenu)
         content.appendChild(navbar)
@@ -49,14 +49,14 @@ const Display = (() => {
         return navbar
     }
 
-    const createProjectMenu = (container) => {
+    const createProjectMenu = (container, appState) => {
         const projectMenu = document.createElement("div")
         projectMenu.classList.add("project-menu")
         projectMenu.id = "project-menu"
         const heading = document.createElement("h4")
         heading.textContent = "Projects"
         projectMenu.appendChild(heading)
-        const items = createProjectMenuItems(container)
+        const items = createProjectMenuItems(container, appState)
         projectMenu.appendChild(items)
 
         const button = document.createElement("button")
@@ -103,41 +103,48 @@ const Display = (() => {
         }
         function addProject(name) {
             App.addProject(name)
+            Memory.save()
             displayApp()
         }
     }
 
 
-    const createProjectMenuItems = (app) => {
+    const createProjectMenuItems = (app, appState) => {
         const items = document.createElement("div")
-        for (let i = 0; i < App.getProjects().length; i++) {
-            const menuItem = createProjectMenuItem(App.getProjects()[i], app)
+        for (let i = 0; i < appState.length; i++) {
+            const menuItem = createProjectMenuItem(appState[i], app, i)
             items.appendChild(menuItem)
         } 
         return items
     }
 
-    const createProjectMenuItem = (project, app) => {
+    const createProjectMenuItem = (project, app, index) => {
+        const realProject = App.getProjects()[index]
         const item = document.createElement("div")
         const del = document.createElement("button")
         del.textContent = "delete"
         del.addEventListener("click",
          () => {
+            console.log(App.getProjects());
+            console.log(realProject);
             alert("Delete Project?")
-            App.deleteProject(project)
+            App.deleteProject(project.name)
+            Memory.save()
             displayApp()
             }
         )
         item.appendChild(del)
         const link = document.createElement("a")
-        link.addEventListener("click", () => showProjects(project, app))
+        link.addEventListener("click", () => showProjects(project, app, realProject))
         item.classList.add("project-menu--item")
-        link.textContent = `${project.getProjectName()}`
+        link.textContent = `${project.name}`
         item.appendChild(link)
         return item
     }
 
-    const showProjects = (project, container) => {
+    const showProjects = (project, container, realProject) => {
+        console.log(realProject);
+        
         const getAppDiv = document.getElementById("app-div")
         const appDiv = getAppDiv ? getAppDiv : document.createElement("div")
         appDiv.id = "app-div"
@@ -158,8 +165,8 @@ const Display = (() => {
         const itemsContainer = getDiv ? getDiv : document.createElement("div")
         itemsContainer.id = "items-container"
         itemsContainer.textContent = ""
-        for (let i = 0; i < project.getProjectItems().length ; i++) {
-            const itemCard = createItemCard(project.getProjectItems()[i], project, container)
+        for (let i = 0; i < project.items.length ; i++) {
+            const itemCard = createItemCard(project.items[i], realProject, container)
             itemsContainer.appendChild(itemCard)
         }
         appDiv.appendChild(itemsContainer)
@@ -215,7 +222,7 @@ const Display = (() => {
                     dateInput.value,
                     descInput.value
                     )
-                project.addItem(newItem)
+                realProject.addItem(newItem)
                 showProjects(project, container)
             
             })
@@ -233,12 +240,12 @@ const Display = (() => {
         itemCard.classList.add("item-card")
 
         const itemName = document.createElement("p")
-        itemName.textContent = item.getItemName()
+        itemName.textContent = item.name
         itemName.classList.add("item-name")
         itemCard.appendChild(itemName)
 
         const itemDate = document.createElement("p")
-        itemDate.textContent = `due date: ${item.getItemDate()}`
+        itemDate.textContent = `due date: ${item.due}`
         itemDate.classList.add("item-date")
         itemCard.appendChild(itemDate)
 
@@ -247,15 +254,15 @@ const Display = (() => {
         itemCard.appendChild(checkbox)
 
         const itemDesc = document.createElement("p")
-        itemDesc.textContent = item.getItemDesc()
+        itemDesc.textContent = item.desc 
         itemDesc.classList.add("item-desc")
         itemCard.appendChild(itemDesc)
 
         const del = document.createElement("button")
         del.textContent = "delete task"
         del.addEventListener("click", () => {
-            project.deleteItem(item.getItemName())
-            showProjects(project, app)
+            project.deleteItem(item.name)
+            showProjects(project.stringify(), app, project)
         })
 
         itemCard.appendChild(del)
@@ -270,3 +277,5 @@ const Display = (() => {
 })()
 
 Display.displayApp()
+
+console.log(App.stringify());

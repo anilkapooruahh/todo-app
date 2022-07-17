@@ -1,3 +1,5 @@
+
+
 const Item = (name, due, desc = "") => {
     let itemName = name;
     let itemdueDate = due;
@@ -19,7 +21,15 @@ const Item = (name, due, desc = "") => {
         itemDesc = desc;
     };
 
-    return { getItemDate, getItemName, getItemDesc, setItemDate, setItemName, setItemDesc };
+    const stringify = () => {
+        return {
+            name: itemName,
+            due: itemdueDate,
+            desc: itemDesc
+        }
+    }
+
+    return { getItemDate, getItemName, getItemDesc, setItemDate, setItemName, setItemDesc, stringify };
 };
 
 

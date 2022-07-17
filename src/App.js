@@ -1,7 +1,7 @@
 import Project from "./Project";
 
-import Item from "./Item";
-import { de } from "date-fns/locale";
+import Item from "./Item"
+
 
 
 
@@ -33,14 +33,19 @@ const App = (() => {
         if (projects.filter(item => item.getProjectName() === projectName).length === 0) {
             const project = Project(projectName);
             projects.push(project);
+          
         }
     };
 
     const deleteProject = (deleteProjectName) => {
-       projects = projects.filter(project => project.getProjectName() !== deleteProjectName.getProjectName());
+       projects = projects.filter(project => project.name !== deleteProjectName);
     };
 
-    return { addProject, deleteProject, getProjects };
+    const stringify = () => {
+       return projects.map(project => project.stringify())
+    }
+
+    return { addProject, deleteProject, getProjects, stringify };
 })();
 
 export default App
