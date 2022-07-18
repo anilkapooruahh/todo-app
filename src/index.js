@@ -11,7 +11,6 @@ library.add(faAlignJustify)
 const content = document.getElementById("content")
 
 
-Memory.save()
 const Display = (() => {
     let DEFAULT = true
     
@@ -250,6 +249,8 @@ const Display = (() => {
     }
 
     const createItemCard = (item, project, app) => {
+        const realItem = project.getProjectItems().filter(it => it.getItemName() === item.name)
+
         const itemCard = document.createElement("div")
         itemCard.classList.add("item-card")
 
@@ -276,13 +277,89 @@ const Display = (() => {
         del.textContent = "delete task"
         del.addEventListener("click", () => {
             project.deleteItem(item.name)
+            Memory.save()
             showProjects(project.stringify(), app, project)
         })
 
+        const edit = document.createElement("button")
+        edit.textContent = "edit task"
+        edit.addEventListener("click", () => { 
+            edit.classList.toggle("hide")
+            updateItemForm(project, app, edit, item) 
+        })
+
         itemCard.appendChild(del)
+        itemCard.appendChild(edit)
 
         return itemCard
+        function updateItemForm(project, appDiv, button, item) {
+            const form = document.createElement("form")
+            form.classList.add("item-form")
 
+            const heading = document.createElement("h3")
+            heading.textContent = "Edit Task"
+            form.appendChild(heading)
+
+            const nameField = document.createElement("div")
+            const nameInput = document.createElement("input")
+            const nameLabel = document.createElement("p")
+            nameLabel.textContent = "Task name"
+            nameField.appendChild(nameLabel)
+            nameField.appendChild(nameInput)
+            form.appendChild(nameField)
+
+            const dateField = document.createElement("div")
+            const dateInput = document.createElement("input")
+            const dateLabel = document.createElement("p")
+            dateInput.type = "date"
+            dateLabel.textContent = "Due date"
+            dateField.appendChild(dateLabel)
+            dateField.appendChild(dateInput)
+            form.appendChild(dateField)
+
+            
+            const descField = document.createElement("div")
+            const descInput = document.createElement("input")
+            const descLabel = document.createElement("p")
+            descInput.type = "textarea"
+            descLabel.textContent = "Description"
+            descField.appendChild(descLabel)
+            descField.appendChild(descInput)
+            form.appendChild(descField)
+
+            const add  = document.createElement("button")
+            add.textContent = "Submit"
+            add.addEventListener("click", (e) => {
+                e.preventDefault()
+                const newItem = Item(
+                    nameInput.value,
+                    dateInput.value,
+                    descInput.value
+                    )
+
+                project.deleteItem(item.name)
+                project.addItem(newItem)
+                Memory.save()
+                showProjects(project.stringify(), app, project)
+                form.classList.toggle("hide")
+                button.classList.toggle("hide")
+            
+            })
+
+            const cancel = document.createElement("button")
+            cancel.textContent = "cancel"
+            cancel.addEventListener("click", (e) => {
+                e.preventDefault()
+                form.classList.toggle("hide")
+                button.classList.toggle("hide")
+            })
+
+
+            form.appendChild(add)
+            form.appendChild(cancel)
+
+            appDiv.appendChild(form)
+        }
     }
 
 
@@ -292,4 +369,4 @@ const Display = (() => {
 
 Display.displayApp()
 
-console.log(App.stringify());
+

@@ -1,3 +1,4 @@
+import { intlFormat } from "date-fns";
 import Memory from "./Memory";
 
 const Project = (name) => {
@@ -24,18 +25,16 @@ const Project = (name) => {
    
     };
 
-    const updateItem = (itemName) => {
-        
-    }
 
     const stringify = () => {
+        console.log(projectItems);
         return {
             name: projectName,
             items: projectItems.map(item => item.stringify())
         }
     }
 
-    return { getProjectName, setProjectName, getProjectItems, addItem, deleteItem, stringify };
+    return { getProjectName, setProjectName, getProjectItems, addItem, deleteItem, stringify  };
 };
 
 export default Project
