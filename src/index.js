@@ -15,7 +15,8 @@ const Display = (() => {
     let DEFAULT = true
     
     const displayApp = () => {
-        const appState = JSON.parse(Memory.load("appState"))
+        const state = JSON.parse(Memory.load("appState"))
+        const appState = state ? state : App.stringify() 
         console.log(appState);
         const toggleMenu = () => {
             const menu = document.getElementById("project-menu")
