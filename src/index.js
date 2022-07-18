@@ -232,8 +232,17 @@ const Display = (() => {
             
             })
 
-            form.appendChild(add)
+            const cancel = document.createElement("button")
+            cancel.textContent = "cancel"
+            cancel.addEventListener("click", (e) => {
+                e.preventDefault()
+                form.classList.toggle("hide")
+                button.classList.toggle("hide")
+            })
 
+
+            form.appendChild(add)
+            form.appendChild(cancel)
 
             appDiv.appendChild(form)
 
