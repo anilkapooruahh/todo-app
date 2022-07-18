@@ -24,6 +24,10 @@ const Project = (name) => {
    
     };
 
+    const updateItem = (itemName) => {
+        
+    }
+
     const stringify = () => {
         return {
             name: projectName,

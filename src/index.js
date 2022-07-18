@@ -13,6 +13,7 @@ const content = document.getElementById("content")
 
 Memory.save()
 const Display = (() => {
+    let DEFAULT = true
     
     const displayApp = () => {
         const appState = JSON.parse(Memory.load("appState"))
@@ -111,6 +112,9 @@ const Display = (() => {
 
     const createProjectMenuItems = (app, appState) => {
         const items = document.createElement("div")
+        if (DEFAULT) {
+            showProjects(appState[0], app, App.getProjects()[0])
+        }
         for (let i = 0; i < appState.length; i++) {
             const menuItem = createProjectMenuItem(appState[i], app, i)
             items.appendChild(menuItem)
@@ -121,19 +125,6 @@ const Display = (() => {
     const createProjectMenuItem = (project, app, index) => {
         const realProject = App.getProjects()[index]
         const item = document.createElement("div")
-        const del = document.createElement("button")
-        del.textContent = "delete"
-        del.addEventListener("click",
-         () => {
-            console.log(App.getProjects());
-            console.log(realProject);
-            alert("Delete Project?")
-            App.deleteProject(project.name)
-            Memory.save()
-            displayApp()
-            }
-        )
-        item.appendChild(del)
         const link = document.createElement("a")
         link.addEventListener("click", () => showProjects(project, app, realProject))
         item.classList.add("project-menu--item")
@@ -143,24 +134,37 @@ const Display = (() => {
     }
 
     const showProjects = (project, container, realProject) => {
+        DEFAULT = false
         console.log(realProject);
         
         const getAppDiv = document.getElementById("app-div")
         const appDiv = getAppDiv ? getAppDiv : document.createElement("div")
         appDiv.id = "app-div"
         appDiv.textContent = ""
-        if (!getAppDiv) {
-            makeHeading()
-        }
+        makeHeading()
 
         const add = document.createElement("button")
-        add.textContent = "add"
+        add.textContent = "add Task"
         add.addEventListener("click", () => {
             createItemForm(project, appDiv, add)
             add.classList.toggle("hide")
         })
         appDiv.appendChild(add)
 
+        const del = document.createElement("button")
+        del.textContent = "delete Project"
+        del.addEventListener("click",
+         () => {
+            console.log(App.getProjects());
+            console.log(realProject);
+            alert("Delete Project?")
+            App.deleteProject(project.name)
+            Memory.save()
+            displayApp()
+            })
+        appDiv.appendChild(del)
+
+        
         const getDiv = document.getElementById("items-container")
         const itemsContainer = getDiv ? getDiv : document.createElement("div")
         itemsContainer.id = "items-container"
@@ -223,7 +227,8 @@ const Display = (() => {
                     descInput.value
                     )
                 realProject.addItem(newItem)
-                showProjects(project, container)
+                Memory.save()
+                showProjects(realProject.stringify(), container, realProject)
             
             })
 
