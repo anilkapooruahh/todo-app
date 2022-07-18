@@ -112,7 +112,7 @@ const Display = (() => {
     const createProjectMenuItems = (app, appState) => {
         const items = document.createElement("div")
         if (DEFAULT) {
-            showProjects(appState[0], app, App.getProjects()[0])
+            showProjects(App.getProjects()[0].stringify(), app, App.getProjects()[0])
         }
         for (let i = 0; i < appState.length; i++) {
             const menuItem = createProjectMenuItem(appState[i], app, i)
